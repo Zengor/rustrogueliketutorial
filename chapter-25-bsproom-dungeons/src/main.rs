@@ -68,12 +68,12 @@ pub struct State {
 
 impl State {
     fn run_systems(&mut self) {
-        let mut mapindex = MapIndexingSystem{};
-        mapindex.run_now(&self.ecs);
         let mut vis = VisibilitySystem{};
         vis.run_now(&self.ecs);
         let mut mob = MonsterAI{};
         mob.run_now(&self.ecs);
+        let mut mapindex = MapIndexingSystem{};
+        mapindex.run_now(&self.ecs);
         let mut triggers = trigger_system::TriggerSystem{};
         triggers.run_now(&self.ecs);
         let mut melee = MeleeCombatSystem{};
@@ -140,7 +140,7 @@ impl GameState for State {
                 if self.mapgen_timer > 300.0 {
                     self.mapgen_timer = 0.0;
                     self.mapgen_index += 1;
-                    if self.mapgen_index == self.mapgen_history.len() {
+                    if self.mapgen_index >= self.mapgen_history.len() {
                         newrunstate = self.mapgen_next_state.unwrap();
                     }
                 }

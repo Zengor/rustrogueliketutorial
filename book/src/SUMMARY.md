@@ -1,7 +1,6 @@
 # Summary
 
 [Introduction](./chapter_0.md)
-- [Contributors](./contributors.md)
 - [Section 1 - Hello Rust](./chapter_1.md)
     - [Entities and Components](./chapter_2.md)
     - [Walking A Map](./chapter_3.md)
@@ -45,3 +44,27 @@
     - [Doors](./chapter_40.md)
     - [Decouple map size from screen size](./chapter_41.md)
     - [Section 3 Conclusion](./chapter_42.md)
+- [Section 4 - Making A Game](./chapter_43.md)
+    - [Design Document](./chapter_44.md)
+    - [Raw Files, Data-Driven Design](./chapter_45.md)
+    - [Data-Driven Spawn Tables](./chapter_46.md)
+    - [Making the town](./chapter_47.md)
+    - [Populating the town](./chapter_48.md)
+    - [Living bystanders](./chapter_49.md)
+    - [Game Stats](./chapter_50.md)
+    - [Equipment](./chapter_51.md)
+    - [User Interface](./chapter_52.md)
+    - [Into the Woods!](./chapter_53.md)
+    - [XP](./chapter_54.md)
+    - [Backtracking](./chapter_55.md)
+    - [Into the caverns](./chapter_56.md)
+    - [Better AI](./chapter_57.md)
+    - [Item Stats and Vendors](./chapter_58.md)
+    - [Deep caverns](./chapter_59.md)
+    - [Cavern to Dwarf Fort](./chapter_60.md)
+    - [Town Portals](./chapter_61.md)
+    - [Magic Items](./chapter_62.md)
+    - Magic Spells
+    - Fortress level
+    - Random Seeds
+- [Contributors](./contributors.md)

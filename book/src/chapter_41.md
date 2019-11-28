@@ -272,6 +272,7 @@ fn draw_tooltips(ecs: &World, ctx : &mut Rltk) {
     { 
         return; 
     }
+    if !map.visible_tiles[map.xy_idx(mouse_map_pos.0, mouse_map_pos.1)] { return; }
     let mut tooltip : Vec<String> = Vec::new();
     for (name, position, _hidden) in (&names, &positions, !&hidden).join() {
         if position.x == mouse_map_pos.0 && position.y == mouse_map_pos.1 {
@@ -318,7 +319,7 @@ pub fn ranged_target(gs : &mut State, ctx : &mut Rltk, range : i32) -> (ItemMenu
             if distance <= range as f32 {
                 let screen_x = idx.x - min_x;
                 let screen_y = idx.y - min_y;
-                if screen_x > min_x && screen_x < max_x && screen_y > min_y && screen_y < max_y {
+                if screen_x > 1 && screen_x < (max_x - min_x)-1 && screen_y > 1 && screen_y < (max_y - min_y)-1 {
                     ctx.set_bg(screen_x, screen_y, RGB::named(rltk::BLUE));
                     available_cells.push(idx);
                 }
@@ -361,36 +362,6 @@ This is fundamentally what we had before, with some changes:
 If you `cargo run` now, targeting will work:
 
 ![Screenshot](./c41-s3.jpg).
-
-## Addendum 1: Fixing a bug in the visibility calculator
-
-You may encounter a crash when boundaries haven't properly been applied to the edge of the map. In `visibility_system.rs`, the following fix takes care of it:
-
-```rust
-for vis in viewshed.visible_tiles.iter() {
-        if vis.x > 0 && vis.x < map.width-1 && vis.y > 0 && vis.y < map.height-1 {
-            let idx = map.xy_idx(vis.x, vis.y);
-            map.revealed_tiles[idx] = true;
-            map.visible_tiles[idx] = true;
-
-            // Chance to reveal hidden things
-            for e in map.tile_content[idx].iter() {
-                let maybe_hidden = hidden.get(*e);
-                if let Some(_maybe_hidden) = maybe_hidden {
-                    if rng.roll_dice(1,24)==1 {
-                        let name = names.get(*e);
-                        if let Some(name) = name {
-                            log.entries.insert(0, format!("You spotted a {}.", &name.name));
-                        }
-                        hidden.remove(*e);
-                    }
-                }
-            }
-        }
-    }
-```
-
-This will be merged back into the tutorial soon - this addendum is to let you know we fixed it.
 
 ## Variable map sizes
 
@@ -637,7 +608,7 @@ This is a lot like our regular map drawing, but we lock the camera to the middle
 In `main.rs`, replace the call to `draw_map` with:
 
 ```rust
-camera::render_debug_map(&self.mapgen_history[self.mapgen_index], ctx);
+if self.mapgen_index < self.mapgen_history.len() { camera::render_debug_map(&self.mapgen_history[self.mapgen_index], ctx); }
 ```
 
 Now you can go into `map.rs` and remove `draw_map`, `wall_glyph` and `is_revealed_and_wall` completely.

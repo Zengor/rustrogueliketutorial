@@ -21,7 +21,7 @@ In our `Map` implementation, we'll need a helper function:
 ```rust
 fn is_exit_valid(&self, x:i32, y:i32) -> bool {
     if x < 1 || x > self.width-1 || y < 1 || y > self.height-1 { return false; }
-    let idx = (y * self.width) + x;
+    let idx = self.xy_idx(x, y);
     self.tiles[idx as usize] != TileType::Wall
 }
 ```
@@ -139,22 +139,12 @@ This function is very simple: it sets `blocked` for a tile to true if its a wall
 ```rust
 fn is_exit_valid(&self, x:i32, y:i32) -> bool {
     if x < 1 || x > self.width-1 || y < 1 || y > self.height-1 { return false; }
-    let idx = (y * self.width) + x;
-    !self.blocked[idx as usize]
+    let idx = self.xy_idx(x, y);
+    !self.blocked[idx]
 }
 ```
 
-This is quite straightforward: it checks that `x` and `y` are within the map, returning `false` if the exit is outside of the map (this type of *bounds checking* is worth doing, it prevents your program from crashing because you tried to read outside of the the valid memory area). It then checks the *index* of the tiles array for the specified coordinates, and returns the *inverse* of `blocked` (the `!` is the same as `not` in most languages - so read it as "not blocked at `idx`"). While we're in `map`, there's one more function we are going to need:
-
-```rust
-pub fn clear_content_index(&mut self) {
-    for content in self.tile_content.iter_mut() {
-        content.clear();
-    }
-}
-```
-
-This is also quite simple: it iterates (visits) every vector in the `tile_content` list, mutably (the `iter_mut` obtains a *mutable iterator*). It then tells each vector to `clear` itself - remove all content (it doesn't actually guarantee that it will free up the memory; vectors can keep empty sections ready for more data. This is actually a *good* thing, because acquiring new memory is one of the slowest things a program can do - so it helps keep things running fast).
+This is quite straightforward: it checks that `x` and `y` are within the map, returning `false` if the exit is outside of the map (this type of *bounds checking* is worth doing, it prevents your program from crashing because you tried to read outside of the the valid memory area). It then checks the *index* of the tiles array for the specified coordinates, and returns the *inverse* of `blocked` (the `!` is the same as `not` in most languages - so read it as "not blocked at `idx`").
 
 Now we'll make a new component, `BlocksTile`. You should know the drill by now; in `Components.rs`:
 
@@ -213,12 +203,12 @@ This tells the map to setup blocking from the terrain, and then iterates all ent
 ```rust
 impl State {
     fn run_systems(&mut self) {
-        let mut mapindex = MapIndexingSystem{};
-        mapindex.run_now(&self.ecs);
         let mut vis = VisibilitySystem{};
         vis.run_now(&self.ecs);
         let mut mob = MonsterAI{};
         mob.run_now(&self.ecs);
+        let mut mapindex = MapIndexingSystem{};
+        mapindex.run_now(&self.ecs);
         self.ecs.maintain();
     }
 }
@@ -366,6 +356,18 @@ And we'll add a basic initializer to the new map code:
 ```rust
 tile_content : vec![Vec::new(); 80*50]
 ```
+
+While we're in `map`, there's one more function we are going to need:
+
+```rust
+pub fn clear_content_index(&mut self) {
+    for content in self.tile_content.iter_mut() {
+        content.clear();
+    }
+}
+```
+
+This is also quite simple: it iterates (visits) every vector in the `tile_content` list, mutably (the `iter_mut` obtains a *mutable iterator*). It then tells each vector to `clear` itself - remove all content (it doesn't actually guarantee that it will free up the memory; vectors can keep empty sections ready for more data. This is actually a *good* thing, because acquiring new memory is one of the slowest things a program can do - so it helps keep things running fast).
 
 Then we'll upgrade the indexing system to index all entities by tile:
 

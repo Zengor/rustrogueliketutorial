@@ -42,7 +42,7 @@ members = [
     "chapter-24-map-testing",
     "chapter-25-bsproom-dungeons",
     "chapter-26-bsp-interiors",
-    "chapter-27-cellular-automota",
+    "chapter-27-cellular-automata",
     "chapter-28-drunkards-walk",
     "chapter-29-mazes",
     "chapter-30-dla",
@@ -56,7 +56,25 @@ members = [
     "chapter-38-rooms",
     "chapter-39-halls",
     "chapter-40-doors",
-    "chapter-41-camera"
+    "chapter-41-camera",
+    "chapter-45-raws1",
+    "chapter-46-raws2",
+    "chapter-47-town1",
+    "chapter-48-town2",
+    "chapter-49-town3",
+    "chapter-50-stats",
+    "chapter-51-gear",
+    "chapter-52-ui",
+    "chapter-53-woods",
+    "chapter-54-xp",
+    "chapter-55-backtrack",
+    "chapter-56-caverns",
+    "chapter-57-ai",
+    "chapter-58-itemstats",
+    "chapter-59-caverns2",
+    "chapter-60-caverns3",
+    "chapter-61-townportal",
+    "chapter-62-magicitems"
     ]
 
 [profile.dev]

@@ -152,8 +152,6 @@ impl State {
 }
 ```
 
-The `&["visibility_system"]` is new - it says "run this after visibility, since we depend upon its results. At this point, we don't actually care - but we will, so we'll put it in there now.
-
 If you `cargo run` your project now, it will be very slow - and your console will fill up with "Monster considers their own existence". The AI is running - but it's running every tick!
 
 # Turn-based game, in a tick-based world
@@ -164,13 +162,17 @@ To prevent this - and make a turn-based game - we introduce a new concept to the
 pub enum RunState { Paused, Running }
 ```
 
-We add it to the State type:
+We add it to the `run_systems` call:
 
 ```rust
-pub struct State {
-    pub ecs: World,
-    pub systems: Dispatcher<'static, 'static>,
-    pub runstate : RunState
+impl State {
+    fn run_systems(&mut self) {
+        let mut vis = VisibilitySystem{};
+        vis.run_now(&self.ecs);
+        let mut mob = MonsterAI{};
+        mob.run_now(&self.ecs);
+        self.ecs.maintain();
+    }
 }
 ```
 
@@ -180,7 +182,7 @@ Now, we change our `tick` function to only run the simulation when the game isn'
 
 ```rust
 if self.runstate == RunState::Running {
-    self.systems.dispatch(&self.ecs);
+    self.run_systems();
     self.runstate = RunState::Paused;
 } else {
     self.runstate = player_input(self, ctx);
@@ -330,6 +332,23 @@ impl<'a> System<'a> for MonsterAI {
         }
     }
 }
+```
+
+We also need to give the player a name; we've explicitly included names in the AI's join, so we better be sure that the player has one! Otherwise, the AI will ignore the player altogether. In `main.rs`, we'll include one in the `Player` creation:
+
+```rust
+gs.ecs
+    .create_entity()
+    .with(Position { x: player_x, y: player_y })
+    .with(Renderable {
+        glyph: rltk::to_cp437('@'),
+        fg: RGB::named(rltk::YELLOW),
+        bg: RGB::named(rltk::BLACK),
+    })
+    .with(Player{})
+    .with(Viewshed{ visible_tiles : Vec::new(), range: 8, dirty: true })
+    .with(Name{name: "Player".to_string() })
+    .build();
 ```
 
 If you `cargo run` the project, you now see things like *Goblin #9 shouts insults* - so you can tell who is shouting.

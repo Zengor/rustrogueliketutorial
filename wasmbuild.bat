@@ -25,7 +25,7 @@ CALL :Stage chapter-23-generic-map
 CALL :Stage chapter-24-map-testing
 CALL :Stage chapter-25-bsproom-dungeons
 CALL :Stage chapter-26-bsp-interiors
-CALL :Stage chapter-27-cellular-automota
+CALL :Stage chapter-27-cellular-automata
 CALL :Stage chapter-28-drunkards-walk
 CALL :Stage chapter-29-mazes
 CALL :Stage chapter-30-dla
@@ -40,6 +40,23 @@ CALL :Stage chapter-38-rooms
 CALL :Stage chapter-39-halls
 CALL :Stage chapter-40-doors
 CALL :Stage chapter-41-camera
+CALL :Stage chapter-45-raws1
+CALL :Stage chapter-46-raws2
+CALL :Stage chapter-47-town1
+CALL :Stage chapter-48-town2
+CALL :Stage chapter-49-town3
+CALL :Stage chapter-50-stats
+CALL :Stage chapter-51-gear
+CALL :Stage chapter-52-ui
+CALL :Stage chapter-53-woods
+CALL :Stage chapter-54-xp
+CALL :Stage chapter-55-backtrack
+CALL :Stage chapter-56-caverns
+CALL :Stage chapter-57-ai
+CALL :Stage chapter-58-itemstats
+CALL :Stage chapter-59-caverns2
+CALL :Stage chapter-60-caverns3
+CALL :Stage chapter-61-townportal
 
 REM Publish or perish
 cd book\book\wasm
